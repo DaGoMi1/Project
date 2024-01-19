@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세 정보</title>
+</head>
+<body>
+<div class="login" th:if="${userName == null}">
+    <a href="/login">로그인</a>
+    <a href="/register">회원가입</a>
+</div>
+
+<div th:if="${userName != null}">
+    <a href="/edit"><p th:text="${userName}"></p></a>
+    <a href="logout">로그아웃</a>
+</div>
+
+<nav class="navbar">
+    <div class="logo"><a href="/">DATA SCIENCE</a></div>
+    <ul class="menu">
+        <li class="dropdown">
+            <button class="dropbtn">학과소개</button>
+            <ul class="hiddenmenu">
+                <li><a href="/DI/major">학과소개</a></li>
+                <li><a href="/DI/student">학생회소개</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <button class="dropbtn">공지사항</button>
+            <ul class="hiddenmenu">
+                <li><a href="/notice/notice">공지사항</a></li>
+                <li><a href="/notice/vote">투표</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <button class="dropbtn">게시판</button>
+            <ul class="hiddenmenu">
+                <li><a href="">자유게시판</a></li>
+                <li><a href="">대여게시판</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <button class="dropbtn">기타</button>
+            <ul class="hiddenmenu">
+                <li><a href="/timeTable">시간표</a></li>
+            </ul>
+        </li>
+    </ul>
+    <button id="hamburger"><i class="fa-solid fa-bars"></i></button>
+</nav>
+
+<div th:if="${posting != null}">
+    <h2 th:text="${posting.title}"></h2>
+    <p>글 작성자: <span th:text="${posting.author}"></span></p>
+    <p>글 내용: <span th:text="${posting.content}"></span></p>
+    <!-- 이미지 렌더링 -->
+    <img th:if="${posting.image != null}" th:src="@{'/IMG/' + ${posting.image}}" alt="이미지">
+
+    <!-- 비디오 렌더링 -->
+    <video th:if="${posting.video != null}" controls>
+        <source th:src="@{'/file/' + ${posting.video}}" type="video/avi">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- 파일 다운로드 링크 -->
+    <a th:if="${posting.file != null}" th:href="@{'/file/' + ${posting.file}}" download>파일 다운로드</a>
+
+    <!-- 링크 -->
+    <a th:if="${posting.link != null}" th:href="${posting.link}" target="_blank">링크 바로가기</a>
+
+    <p>작성일시: <span th:text="${posting.created_At}"></span></p>
+</div>
+<script src="/JS/home.js"></script>
+</body>
+</html>
