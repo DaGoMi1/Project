@@ -10,7 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String home() {
+    public String home(Model model, HttpSession session) {
+
+        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+
+        if (loggedInMember != null) {
+            model.addAttribute("userName", loggedInMember.getName());
+        }
+
         return "home";
     }
 }

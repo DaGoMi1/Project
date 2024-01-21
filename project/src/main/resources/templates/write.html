@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,93 +7,13 @@
     <title>공지 글쓰기</title>
 </head>
 <body>
-<div class="login" th:if="${userName == null}">
-    <a href="/login">로그인</a>
-    <a href="/register">회원가입</a>
-</div>
-
-<div th:if="${userName != null}">
-    <a href="/edit"><p th:text="${userName}"></p></a>
-    <a href="logout">로그아웃</a>
-</div>
-
-<nav class="navbar">
-    <div class="logo"><a href="/">DATA SCIENCE</a></div>
-    <ul class="menu">
-        <li class="dropdown">
-            <button class="dropbtn">학과소개</button>
-            <ul class="hiddenmenu">
-                <li><a href="/DI/major">학과소개</a></li>
-                <li><a href="/DI/student">학생회소개</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">공지사항</button>
-            <ul class="hiddenmenu">
-                <li><a href="/notice/notice">공지사항</a></li>
-                <li><a href="/notice/vote">투표</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">게시판</button>
-            <ul class="hiddenmenu">
-                <li><a href="">자유게시판</a></li>
-                <li><a href="">대여게시판</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">기타</button>
-            <ul class="hiddenmenu">
-                <li><a href="/timeTable">시간표</a></li>
-            </ul>
-        </li>
-    </ul>
-    <button id="hamburger"><i class="fa-solid fa-bars"></i></button>
-</nav>
+<div id="member-load" th:insert="~{fragments/MemberInformation :: MemberInformation}"></div>
+<div id="nav-load" th:insert="~{fragments/Navigation :: Navigation}"></div>
 
 <h1>공지 글쓰기</h1>
 
-<!-- 제목, 글쓴이, 글 비밀번호 입력 폼 -->
-<form action="/notice/submit_notice" method="post" enctype="multipart/form-data">
-    <label for="title">제목:</label>
-    <input type="text" id="title" name="title" required><br>
+<div id="postForm-load" th:insert="~{fragments/PostForm :: PostForm}"></div>
 
-    <label for="author">글쓴이:</label>
-    <input type="text" id="author" name="author" required><br>
-
-    <label for="password">글 비밀번호:</label>
-    <input type="password" id="password" name="password" required><br>
-
-    <!-- 작성글 입력 칸 -->
-    <label for="content">작성글:</label>
-    <textarea id="content" name="content" rows="5" cols="40" required></textarea><br>
-
-    <!-- 사진 및 동영상 추가 버튼 -->
-    <label for="image">사진 추가:</label>
-    <input type="file" id="image" name="image" accept="image/"><br>
-
-    <label for="video">동영상 추가:</label>
-    <input type="file" id="video" name="video" accept="video/"><br>
-
-    <!-- 파일 추가 버튼 -->
-    <label for="file">파일 추가:</label>
-    <input type="file" id="file" name="file"><br>
-
-    <!-- 링크 추가 입력란 -->
-    <label for="link">링크 추가:</label>
-    <input type="url" id="link" name="link"><br>
-
-    <!-- 임시등록 버튼과 등록 버튼 -->
-    <button type="button" onclick="tempSave()">임시등록</button>
-    <button type="submit">등록</button>
-</form>
-
-<script>
-    function tempSave() {
-        // 임시등록 버튼을 눌렀을 때의 동작을 추가할 수 있습니다.
-        alert("임시등록되었습니다.");
-    }
-</script>
 <script src="/JS/home.js"></script>
 </body>
 </html>

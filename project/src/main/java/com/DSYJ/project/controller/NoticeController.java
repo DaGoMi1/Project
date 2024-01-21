@@ -78,7 +78,7 @@ public class NoticeController {
         }
 
         postingService.postSave(posting);
-        return "redirect:/notice";
+        return "redirect:/notice/notice";
     }
 
     @GetMapping("/notice/{id}")
@@ -91,6 +91,11 @@ public class NoticeController {
 
         // 상세 보기 페이지로 이동
         return "noticeDetail";
+    }
+
+    @GetMapping("/notice/edit")
+    public String editNotice(){
+        return "write";
     }
 
 }

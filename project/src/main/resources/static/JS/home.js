@@ -55,6 +55,12 @@ btnClose.onclick = closeRtn;
 const $prev = document.querySelector('#prev');
 const $next = document.querySelector('#next');
 
+function editPost() {
+    // 게시물 수정 페이지로 이동하는 로직
+    // 여기서는 /notice/edit 페이지로 이동하도록 설정
+    window.location.href = '/notice/edit';
+}
+
 // inner태그를 다 가져온다. (사진 개수 리스트)
 // 리스트의 총 길이-1 은 마지막 인덱스이다.
 // index가 0 이면 prev버튼 사용 못함

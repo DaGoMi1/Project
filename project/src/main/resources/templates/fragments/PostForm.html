@@ -1,0 +1,30 @@
+<form th:fragment="PostForm"
+      action="/notice/submit_notice" method="post" enctype="multipart/form-data">
+    <label for="title">제목:</label>
+    <input type="text" id="title" name="title" required><br>
+
+    <label for="author">글쓴이:</label>
+    <input type="text" id="author" name="author" required><br>
+
+    <label for="password">글 비밀번호:</label>
+    <input type="password" id="password" name="password" required><br>
+
+    <!-- 작성글 입력 칸 -->
+    <label for="content">작성글:</label>
+    <textarea id="content" name="content" rows="5" cols="40" required></textarea><br>
+
+    <!-- 사진 및 동영상 추가 버튼 -->
+    <label for="image">사진 추가:</label>
+    <input type="file" id="image" name="image" accept="image/"><br>
+
+    <label for="video">동영상 추가:</label>
+    <input type="file" id="video" name="video" accept="video/"><br>
+
+    <!-- 파일 추가 버튼 -->
+    <label for="file">파일 추가:</label>
+    <input type="file" id="file" name="file"><br>
+
+    <!-- 링크 추가 입력란 -->
+    <label for="link">링크 추가:</label>
+    <input type="url" id="link" name="link"><br>
+</form>

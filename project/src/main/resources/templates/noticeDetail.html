@@ -1,53 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>게시글 상세 정보</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/CSS/home.css" />
+    <script src="https://kit.fontawesome.com/f668b9b848.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<div class="login" th:if="${userName == null}">
-    <a href="/login">로그인</a>
-    <a href="/register">회원가입</a>
-</div>
-
-<div th:if="${userName != null}">
-    <a href="/edit"><p th:text="${userName}"></p></a>
-    <a href="logout">로그아웃</a>
-</div>
-
-<nav class="navbar">
-    <div class="logo"><a href="/">DATA SCIENCE</a></div>
-    <ul class="menu">
-        <li class="dropdown">
-            <button class="dropbtn">학과소개</button>
-            <ul class="hiddenmenu">
-                <li><a href="/DI/major">학과소개</a></li>
-                <li><a href="/DI/student">학생회소개</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">공지사항</button>
-            <ul class="hiddenmenu">
-                <li><a href="/notice/notice">공지사항</a></li>
-                <li><a href="/notice/vote">투표</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">게시판</button>
-            <ul class="hiddenmenu">
-                <li><a href="">자유게시판</a></li>
-                <li><a href="">대여게시판</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">기타</button>
-            <ul class="hiddenmenu">
-                <li><a href="/timeTable">시간표</a></li>
-            </ul>
-        </li>
-    </ul>
-    <button id="hamburger"><i class="fa-solid fa-bars"></i></button>
-</nav>
+<div id="member-load" th:insert="~{fragments/MemberInformation :: MemberInformation}"></div>
+<div id="nav-load" th:insert="~{fragments/Navigation :: Navigation}"></div>
 
 <div th:if="${posting != null}">
     <h2 th:text="${posting.title}"></h2>
@@ -69,6 +31,9 @@
     <a th:if="${posting.link != null}" th:href="${posting.link}" target="_blank">링크 바로가기</a>
 
     <p>작성일시: <span th:text="${posting.created_At}"></span></p>
+
+    <button th:if="${posting.author == userName}" onclick="editPost()">수정하기</button>
+
 </div>
 <script src="/JS/home.js"></script>
 </body>

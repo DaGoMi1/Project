@@ -1,0 +1,13 @@
+<body th:fragment="MemberInformation">
+
+<div class="login" th:if="${userName == null}">
+    <a href="/login">로그인</a>
+    <a href="/register">회원가입</a>
+</div>
+
+<div th:if="${userName != null}">
+    <a href="/edit"><p th:text="${userName}"></p></a>
+    <a href="/logout">로그아웃</a>
+</div>
+
+</body>

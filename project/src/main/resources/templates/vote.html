@@ -8,49 +8,8 @@
     <title>Document</title>
 </head>
 <body>
-<div class="login" th:if="${userName == null}">
-    <a href="/login">로그인</a>
-    <a href="/register">회원가입</a>
-</div>
-
-<div th:if="${userName != null}">
-    <a href="/edit"><p th:text="${userName}"></p></a>
-    <a href="logout">로그아웃</a>
-</div>
-
-<nav class="navbar">
-    <div class="logo"><a href="/">DATA SCIENCE</a></div>
-    <ul class="menu">
-        <li class="dropdown">
-            <button class="dropbtn">학과소개</button>
-            <ul class="hiddenmenu">
-                <li><a href="/DI/major">학과소개</a></li>
-                <li><a href="/DI/student">학생회소개</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">공지사항</button>
-            <ul class="hiddenmenu">
-                <li><a href="/notice/notice">공지사항</a></li>
-                <li><a href="/notice/vote">투표</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">게시판</button>
-            <ul class="hiddenmenu">
-                <li><a href="">자유게시판</a></li>
-                <li><a href="">대여게시판</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-            <button class="dropbtn">기타</button>
-            <ul class="hiddenmenu">
-                <li><a href="/timeTable">시간표</a></li>
-            </ul>
-        </li>
-    </ul>
-    <button id="hamburger"><i class="fa-solid fa-bars"></i></button>
-</nav>
+<div id="member-load" th:insert="~{fragments/MemberInformation :: MemberInformation}"></div>
+<div id="nav-load" th:insert="~{fragments/Navigation :: Navigation}"></div>
 
 <main class="main">
     <div class="wrap">
