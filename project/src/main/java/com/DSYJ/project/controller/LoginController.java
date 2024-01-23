@@ -38,26 +38,16 @@ public class LoginController {
         model.addAttribute("loginError", true);
         return "login";
     }
+
     @PostMapping("/login-process")
     public String idChecking(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        for (GrantedAuthority authority : authorities) {
-            String role = authority.getAuthority();
-
-            if ("ROLE_ADMIN".equals(role)) {
-                // ADMIN 권한이 있는 경우 처리
-                return "redirect:/admin";
-            } else if ("ROLE_USER".equals(role)) {
-                // USER 권한이 있는 경우 처리
-                return "redirect:/user";
-            }
-            // 다른 권한이 필요한 경우 추가
-        }
-
-        // 권한이 없거나 처리하지 않은 권한이 있는 경우 기본 처리
-        return "redirect:/default";
+        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+        GrantedAuthority auth = iter.next();
+        String role = auth.getAuthority();
+        return "redirect:/";
     }
 
         @GetMapping("/logout")
@@ -65,6 +55,4 @@ public class LoginController {
             session.invalidate();
             return "redirect:/";
         }
-
-
 }
