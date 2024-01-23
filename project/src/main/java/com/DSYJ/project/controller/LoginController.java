@@ -3,12 +3,20 @@ package com.DSYJ.project.controller;
 import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import  jakarta.servlet.http.HttpSession;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 @Controller
 public class LoginController {
@@ -25,27 +33,38 @@ public class LoginController {
         return "login";
     }
 
+    @GetMapping("/login-error")
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "login";
+    }
     @PostMapping("/login-process")
     public String idChecking(@RequestParam String userId, @RequestParam String password, Model model, HttpSession session) {
-        // 아이디와 비밀번호로 회원 조회
-        Member foundMember = memberService.findByUserIdAndPassword(userId, password);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (foundMember != null) {
-            // 로그인 성공
-            session.setAttribute("loggedInMember", foundMember); // 세션에 로그인 정보 저장
-            return "redirect:/";
-        } else {
-            // 로그인 실패
-            model.addAttribute("message", "로그인 실패. 아이디 또는 비밀번호를 확인하세요.");
-            return "error";
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (GrantedAuthority authority : authorities) {
+            String role = authority.getAuthority();
+
+            if ("ROLE_ADMIN".equals(role)) {
+                // ADMIN 권한이 있는 경우 처리
+                return "redirect:/admin";
+            } else if ("ROLE_USER".equals(role)) {
+                // USER 권한이 있는 경우 처리
+                return "redirect:/user";
+            }
+            // 다른 권한이 필요한 경우 추가
         }
+
+        // 권한이 없거나 처리하지 않은 권한이 있는 경우 기본 처리
+        return "redirect:/default";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.removeAttribute("loggedInMember"); // 세션에서 로그인 정보 삭제
-        return "redirect:/";
-    }
-    
+        @GetMapping("/logout")
+        public String logout(HttpSession session) {
+            session.invalidate();
+            return "redirect:/";
+        }
+
 
 }

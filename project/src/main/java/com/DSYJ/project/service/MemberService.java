@@ -4,13 +4,17 @@ package com.DSYJ.project.service;
 import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Transactional
-public class MemberService {
+public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
@@ -27,6 +31,17 @@ public class MemberService {
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 아이디입니다.");
                 });
+    }
+
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        return User.builder()
+                .username(member.getUserId())
+                .password(member.getPassword())
+                .roles("USER") // 원하는 권한 설정
+                .build();
     }
 
     public List<Member> findMember() {
