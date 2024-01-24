@@ -4,11 +4,13 @@ package com.DSYJ.project.service;
 import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +19,22 @@ import java.util.Optional;
 public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
+    @Autowired @Lazy
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 
+
     public void join(Member member) {
         validateDuplicateMember(member); //중복 회원 검증
+
+        member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+        member.setRole("ROLE_USER");
+
         memberRepository.save(member);
+
     }
 
     private void validateDuplicateMember(Member member) {

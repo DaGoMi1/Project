@@ -21,6 +21,11 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
+    public boolean existsByUserId(String userId) {
+        return false;
+    }
+
+    @Override
     public Optional<Member> findByUserIdAndPassword(String userId, String password) {
         List<Member> result = em.createQuery("select m from Member m where m.userId = :userId and m.password = :password", Member.class)
                 .setParameter("userId", userId)

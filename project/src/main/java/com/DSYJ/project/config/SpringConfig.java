@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringConfig {
 
-    private EntityManager em;
+    private final EntityManager em;
 
     @Autowired
     public SpringConfig(EntityManager em) {
