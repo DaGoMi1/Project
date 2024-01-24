@@ -2,6 +2,7 @@ package com.DSYJ.project.service;
 
 
 import com.DSYJ.project.domain.Member;
+import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,7 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-        return User.builder()
-                .username(member.getUserId())
-                .password(member.getPassword())
-                .roles("USER") // 원하는 권한 설정
-                .build();
+        return new CustomUserDetails(member);
     }
 
     public List<Member> findMember() {

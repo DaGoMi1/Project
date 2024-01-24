@@ -36,8 +36,12 @@ public class SecurityConfig {
 
         http
                 .formLogin((auth)->auth.loginPage("/login")
-                        .loginProcessingUrl("/login-process")
+                        .loginProcessingUrl("/loginProc")
                         .failureUrl("/login-error")
+                        .defaultSuccessUrl("/")
+                        .successHandler((request, response, authentication) -> {
+                            response.sendRedirect("/");
+                        })
                         .permitAll()
                 );
 
@@ -60,5 +64,4 @@ public class SecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
