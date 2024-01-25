@@ -13,6 +13,8 @@ public class Posting {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
+    private String userId;
+
     private String title;
 
     private String author;
@@ -111,4 +113,11 @@ public class Posting {
         this.title = title;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

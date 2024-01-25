@@ -14,6 +14,10 @@
 
 <div id="postForm-load" th:insert="~{fragments/PostForm :: PostForm}"></div>
 
+<form action="/submit_notice" method="post" enctype="multipart/form-data" th:object="${postingForm}">
+    <button type="submit" class="write">글쓰기</button>
+</form>
+
 <script src="/JS/home.js"></script>
 </body>
 </html>

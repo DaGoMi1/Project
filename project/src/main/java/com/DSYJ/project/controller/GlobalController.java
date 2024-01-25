@@ -17,7 +17,8 @@ public class GlobalController {
 
         if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
             Member loggedInMember = userDetails.getMember();
-            model.addAttribute("username", loggedInMember.getName());
+            model.addAttribute("userName", loggedInMember.getName());
+            model.addAttribute("userId", loggedInMember.getUserId());
         }
     }
 }

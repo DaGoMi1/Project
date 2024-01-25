@@ -56,9 +56,13 @@ const $prev = document.querySelector('#prev');
 const $next = document.querySelector('#next');
 
 function editPost() {
-    // 게시물 수정 페이지로 이동하는 로직
-    // 여기서는 /notice/edit 페이지로 이동하도록 설정
-    window.location.href = '/notice/edit';
+    // 게시글 수정 로직을 여기에 구현
+    console.log("수정 버튼 클릭");
+}
+
+function deletePost() {
+    // 게시글 삭제 로직을 여기에 구현
+    console.log("삭제 버튼 클릭");
 }
 
 // inner태그를 다 가져온다. (사진 개수 리스트)

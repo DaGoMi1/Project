@@ -1,7 +1,10 @@
 package com.DSYJ.project.controller;
 
 import com.DSYJ.project.domain.Posting;
+import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.PostingService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +42,14 @@ public class NoticeController {
     }
 
     @PostMapping("/submit_notice")
-    public String submitNotice(@ModelAttribute PostingForm form) {
+    public String submitNotice(@ModelAttribute("postingForm") PostingForm form, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
         Posting posting = new Posting();
+
         posting.setAuthor(form.getAuthor());
+        posting.setUserId(userDetails.getUsername());
         posting.setContent(form.getContent());
         posting.setTitle(form.getTitle());
         posting.setPassword(form.getPassword());

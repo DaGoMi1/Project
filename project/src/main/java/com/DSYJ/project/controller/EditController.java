@@ -28,11 +28,11 @@ public class EditController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         Member loggedInMember = userDetails.getMember();
-        String name = loggedInMember.getName();
         // 여기서 name을 기반으로 Member 정보를 데이터베이스에서 가져와서 model에 추가하는 작업을 수행하면 됩니다.
         // ...
 
-        model.addAttribute("name", name);
+        model.addAttribute("name", loggedInMember.getName());
+        model.addAttribute("email", loggedInMember.getEmail());
         // 나머지 필요한 정보를 가져와서 model에 추가
 
         return "myPage";

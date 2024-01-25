@@ -32,7 +32,8 @@
 
     <p>작성일시: <span th:text="${posting.created_At}"></span></p>
 
-    <button th:if="${posting.author == userName}" onclick="editPost()">수정하기</button>
+    <button th:if="${posting.author == userId}" onclick="editPost()">수정하기</button>
+    <button th:if="${posting.author == userId}" onclick="deletePost()">삭제하기</button>
 
 </div>
 <script src="/JS/home.js"></script>
