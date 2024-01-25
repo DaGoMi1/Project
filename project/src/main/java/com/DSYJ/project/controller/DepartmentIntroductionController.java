@@ -13,7 +13,7 @@ public class DepartmentIntroductionController {
     }
 
     @GetMapping("/major")
-    public String mahor() {
+    public String major() {
         return "major";
     }
 

@@ -1,13 +1,13 @@
 <body th:fragment="MemberInformation">
+<div th:if="${username}">
+    <a href="/edit"><p th:text="'안녕하세요, ' + ${username} + '님'"></p></a>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="로그아웃">
+    </form>
+</div>
 
-<div class="login" th:if="${name == null}">
+<div th:unless="${username}">
     <a href="/login">로그인</a>
     <a href="/register">회원가입</a>
 </div>
-
-<div th:if="${name != null}">
-    <a href="/edit"><p th:text="${name}"></p></a>
-    <a href="/logout">로그아웃</a>
-</div>
-
 </body>

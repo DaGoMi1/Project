@@ -18,20 +18,7 @@ import java.util.Iterator;
 public class HomeController {
 
     @GetMapping("/")
-    public String home(Model model) {
-        // 현재 인증된 사용자 정보를 가져옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // 사용자가 인증되었는지 확인
-        if (authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-            Member loggedInMember = userDetails.getMember();
-            String name = loggedInMember.getName();
-
-            model.addAttribute("name", name);
-        }
-
+    public String home() {
         return "home";
     }
 }
