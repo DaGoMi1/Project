@@ -1,9 +1,13 @@
 package com.DSYJ.project.controller;
 
 import com.DSYJ.project.domain.Member;
+import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +23,17 @@ public class EditController {
     }
 
     @GetMapping("/edit")
-    public String myHome(HttpSession session, Model model) {
-        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
-        model.addAttribute("name", loggedInMember.getName());
-        model.addAttribute("email", loggedInMember.getEmail());
+    public String myHome(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        Member loggedInMember = userDetails.getMember();
+        String name = loggedInMember.getName();
+        // 여기서 name을 기반으로 Member 정보를 데이터베이스에서 가져와서 model에 추가하는 작업을 수행하면 됩니다.
+        // ...
+
+        model.addAttribute("name", name);
+        // 나머지 필요한 정보를 가져와서 model에 추가
 
         return "myPage";
     }
@@ -31,9 +42,10 @@ public class EditController {
     public String editUser(@ModelAttribute MemberForm form,
                            @RequestParam String password2,
                            @RequestParam String password3,
-                           HttpSession session) {
-        // 세션에서 로그인된 사용자 정보 가져오기
-        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+                           Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        Member loggedInMember = userDetails.getMember();
 
         loggedInMember.setName(updateField(loggedInMember.getName(), form.getName()));
         loggedInMember.setEmail(updateField(loggedInMember.getEmail(), form.getEmail()));

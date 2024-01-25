@@ -1,6 +1,7 @@
 package com.DSYJ.project.controller;
 
 import com.DSYJ.project.domain.Member;
+import com.DSYJ.project.dto.CustomUserDetails;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,12 +24,12 @@ public class HomeController {
 
         // 사용자가 인증되었는지 확인
         if (authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String id = userDetails.getUsername();
-            String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-            model.addAttribute("id", id);
-            model.addAttribute("role", role);
+            Member loggedInMember = userDetails.getMember();
+            String name = loggedInMember.getName();
+
+            model.addAttribute("name", name);
         }
 
         return "home";
