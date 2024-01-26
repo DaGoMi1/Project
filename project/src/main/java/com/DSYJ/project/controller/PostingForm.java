@@ -1,7 +1,5 @@
 package com.DSYJ.project.controller;
 
-import java.time.LocalDateTime;
-
 public class PostingForm {
     private Long id;
 

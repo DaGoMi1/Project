@@ -1,10 +1,12 @@
 package com.DSYJ.project.service;
 
+import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.repository.PostingRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,12 +25,10 @@ public class PostingService {
         postingRepository.save(posting);
     }
 
-    public void postUpdate(Posting updatedPosting) {
-        // 기존의 게시글을 가져오는 코드
-        Posting existingPosting = postingRepository.findById(updatedPosting.getId())
+    public void postUpdate(Posting updatePosting) {
+        Posting existingPosting = postingRepository.findById(updatePosting.getId())
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
-        // 저장된 게시글 업데이트
         postingRepository.save(existingPosting);
     }
 

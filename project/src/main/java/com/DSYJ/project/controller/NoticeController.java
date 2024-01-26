@@ -1,5 +1,6 @@
 package com.DSYJ.project.controller;
 
+import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.PostingService;
@@ -58,26 +59,19 @@ public class NoticeController {
 
     @PostMapping("/save_edit")
     public String saveEdit(@ModelAttribute PostingForm form) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-
-        // 기존의 게시글을 가져오는 코드
-        Posting existingPosting = postingService.postId(form.getId())
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
-
-        // 수정된 내용으로 업데이트
-        existingPosting.setId(form.getId());
-        existingPosting.setTitle(form.getTitle());
-        existingPosting.setAuthor(form.getAuthor());
-        existingPosting.setContent(form.getContent());
-        existingPosting.setImage(form.getImage());
-        existingPosting.setVideo(form.getVideo());
-        existingPosting.setFile(form.getFile());
-        existingPosting.setLink(form.getLink());
-        existingPosting.setCreated_At(LocalDateTime.now());
+        Posting updatedPosting = new Posting();
+        updatedPosting.setId(form.getId());
+        updatedPosting.setAuthor(form.getAuthor());
+        updatedPosting.setTitle(form.getTitle());
+        updatedPosting.setContent(form.getContent());
+        updatedPosting.setImage(form.getImage());
+        updatedPosting.setVideo(form.getVideo());
+        updatedPosting.setFile(form.getFile());
+        updatedPosting.setLink(form.getLink());
+        updatedPosting.setCreated_At(LocalDateTime.now());
 
         // 저장된 게시글 업데이트
-        postingService.postUpdate(existingPosting);
+        postingService.postUpdate(updatedPosting);
 
         return "redirect:/notice/notice";
     }
