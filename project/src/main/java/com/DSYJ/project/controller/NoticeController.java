@@ -37,53 +37,19 @@ public class NoticeController {
     }
 
     @GetMapping("/write")
-    public String write() {
+    public String write(Model model) {
+        // 빈 폼을 렌더링하기 위해 빈 Posting 객체를 전달
+        model.addAttribute("posting", new Posting());
         return "write";
     }
 
     @PostMapping("/submit_notice")
-    public String submitNotice(@ModelAttribute("postingForm") PostingForm form, Model model) {
+    public String submitNotice(@ModelAttribute("postForm") Posting posting) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        Posting posting = new Posting();
-
-        posting.setAuthor(form.getAuthor());
         posting.setUserId(userDetails.getUsername());
-        posting.setContent(form.getContent());
-        posting.setTitle(form.getTitle());
-        posting.setPassword(form.getPassword());
         posting.setCreated_At(LocalDateTime.now());
-
-        if (form.getImage() != null && !form.getImage().isEmpty()) {
-            // 이미지를 저장하고 그에 대한 URL을 데이터베이스에 저장
-            String image = postingService.saveImage(form.getImage());
-            posting.setImage(image);
-        } else {
-            posting.setImage(null);
-        }
-
-        if (form.getVideo() != null && !form.getVideo().isEmpty()) {
-            // 이미지를 저장하고 그에 대한 URL을 데이터베이스에 저장
-            String video = postingService.saveVideo(form.getVideo());
-            posting.setVideo(video);
-        } else {
-            posting.setVideo(null);
-        }
-
-        if (form.getFile() != null && !form.getFile().isEmpty()) {
-            // 파일을 저장하고 그에 대한 URL을 데이터베이스에 저장
-            String file = postingService.saveFile(form.getFile());
-            posting.setFile(file);
-        } else {
-            posting.setFile(null);
-        }
-
-        if (form.getLink().isEmpty()) {
-            posting.setLink(null);
-        } else {
-            posting.setLink(form.getLink());
-        }
 
         postingService.postSave(posting);
         return "redirect:/notice/notice";
@@ -101,9 +67,14 @@ public class NoticeController {
         return "noticeDetail";
     }
 
-    @GetMapping("/notice/edit")
-    public String editNotice(){
+    @GetMapping("/edit")
+    public String editNotice(@RequestParam("postId") Long postId, Model model) {
+        // postId를 사용하여 게시글 정보를 가져오는 코드
+        Posting existingPosting = postingService.postId(postId)
+                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 게시글을 찾을 수 없습니다: " + postId));
+        ; // 이 메서드는 게시글 ID로 게시글을 조회하는 메서드로 가정
+
+        model.addAttribute("posting", existingPosting);
         return "write";
     }
-
 }

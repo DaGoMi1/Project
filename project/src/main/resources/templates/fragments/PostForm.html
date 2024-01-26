@@ -1,30 +1,31 @@
 <form th:fragment="PostForm"
-      action="/notice/submit_notice" method="post" enctype="multipart/form-data">
+      th:object="${posting}"
+      action="/notice/submit_notice" method="post">
     <label for="title">제목:</label>
-    <input type="text" id="title" name="title" required><br>
+    <input type="text" id="title" name="title" th:value="${posting.title}" required><br>
 
     <label for="author">글쓴이:</label>
-    <input type="text" id="author" name="author" required><br>
-
-    <label for="password">글 비밀번호:</label>
-    <input type="password" id="password" name="password" required><br>
+    <input type="text" id="author" name="author" th:value="${posting.author}" required><br>
 
     <!-- 작성글 입력 칸 -->
     <label for="content">작성글:</label>
-    <textarea id="content" name="content" rows="5" cols="40" required></textarea><br>
+    <textarea id="content" name="content" rows="5" cols="40" required th:text="${posting.content}"></textarea><br>
 
-    <!-- 사진 및 동영상 추가 버튼 -->
+    <!-- 사진 추가 버튼 -->
     <label for="image">사진 추가:</label>
-    <input type="file" id="image" name="image" accept="image/"><br>
+    <input type="text" id="image" name="image" placeholder="이미지 경로 입력" th:value="${posting.image}"><br>
 
+    <!-- 동영상 추가 버튼 -->
     <label for="video">동영상 추가:</label>
-    <input type="file" id="video" name="video" accept="video/"><br>
+    <input type="text" id="video" name="video" placeholder="동영상 경로 입력" th:value="${posting.video}"><br>
 
     <!-- 파일 추가 버튼 -->
     <label for="file">파일 추가:</label>
-    <input type="file" id="file" name="file"><br>
+    <input type="text" id="file" name="file" placeholder="파일 경로 입력" th:value="${posting.file}"><br>
 
     <!-- 링크 추가 입력란 -->
     <label for="link">링크 추가:</label>
-    <input type="url" id="link" name="link"><br>
+    <input type="url" id="link" name="link" th:value="${posting.link}"><br>
+
+    <input type="submit" class="write" value="등록">
 </form>

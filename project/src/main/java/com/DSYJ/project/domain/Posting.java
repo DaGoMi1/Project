@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +19,6 @@ public class Posting {
     private String title;
 
     private String author;
-
-    private String password;
 
     private String content;
 
@@ -87,14 +86,6 @@ public class Posting {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getAuthor() {

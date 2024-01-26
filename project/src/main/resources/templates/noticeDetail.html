@@ -32,8 +32,12 @@
 
     <p>작성일시: <span th:text="${posting.created_At}"></span></p>
 
-    <button th:if="${posting.author == userId}" onclick="editPost()">수정하기</button>
-    <button th:if="${posting.author == userId}" onclick="deletePost()">삭제하기</button>
+    <form th:if="${posting.getUserId() == userId}" action="/notice/edit" method="get">
+        <input type="hidden" name="postId" th:value="${posting.id}" />
+        <input type="submit" class="write" value="수정">
+    </form>
+
+    <input th:unless="${posting.getUserId() == userId}" type="submit" class="write" style="display: none;">
 
 </div>
 <script src="/JS/home.js"></script>
