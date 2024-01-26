@@ -1,6 +1,8 @@
 <form th:fragment="PostForm"
       th:object="${posting}"
-      action="/notice/submit_notice" method="post">
+      th:action="${editable ? '/notice/save_edit' : '/notice/submit_notice'}" method="post">
+    <input type="hidden" id="id" name="id" th:value="${posting.id}" />
+
     <label for="title">제목:</label>
     <input type="text" id="title" name="title" th:value="${posting.title}" required><br>
 

@@ -40,6 +40,7 @@ public class NoticeController {
     public String write(Model model) {
         // 빈 폼을 렌더링하기 위해 빈 Posting 객체를 전달
         model.addAttribute("posting", new Posting());
+        model.addAttribute("editable", false);  // 수정 가능한 상태로 설정
         return "write";
     }
 
@@ -52,6 +53,32 @@ public class NoticeController {
         posting.setCreated_At(LocalDateTime.now());
 
         postingService.postSave(posting);
+        return "redirect:/notice/notice";
+    }
+
+    @PostMapping("/save_edit")
+    public String saveEdit(@ModelAttribute PostingForm form) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        // 기존의 게시글을 가져오는 코드
+        Posting existingPosting = postingService.postId(form.getId())
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        // 수정된 내용으로 업데이트
+        existingPosting.setId(form.getId());
+        existingPosting.setTitle(form.getTitle());
+        existingPosting.setAuthor(form.getAuthor());
+        existingPosting.setContent(form.getContent());
+        existingPosting.setImage(form.getImage());
+        existingPosting.setVideo(form.getVideo());
+        existingPosting.setFile(form.getFile());
+        existingPosting.setLink(form.getLink());
+        existingPosting.setCreated_At(LocalDateTime.now());
+
+        // 저장된 게시글 업데이트
+        postingService.postUpdate(existingPosting);
+
         return "redirect:/notice/notice";
     }
 
@@ -75,6 +102,7 @@ public class NoticeController {
         ; // 이 메서드는 게시글 ID로 게시글을 조회하는 메서드로 가정
 
         model.addAttribute("posting", existingPosting);
+        model.addAttribute("editable", true);  // 수정 가능한 상태로 설정
         return "write";
     }
 }

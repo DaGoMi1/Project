@@ -23,6 +23,15 @@ public class PostingService {
         postingRepository.save(posting);
     }
 
+    public void postUpdate(Posting updatedPosting) {
+        // 기존의 게시글을 가져오는 코드
+        Posting existingPosting = postingRepository.findById(updatedPosting.getId())
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        // 저장된 게시글 업데이트
+        postingRepository.save(existingPosting);
+    }
+
     public Optional<Posting> postId(Long id) {
         return postingRepository.findById(id);
     }
@@ -37,7 +46,7 @@ public class PostingService {
 
         // 실제로는 File I/O 또는 이미지 업로드 라이브러리 등을 사용하여 저장하는 로직을 추가해야 합니다.
 
-        return  "/IMG/" + fileName; // 이미지 파일의 URL 반환
+        return "/IMG/" + fileName; // 이미지 파일의 URL 반환
     }
 
     public String saveVideo(MultipartFile video) {
@@ -53,6 +62,7 @@ public class PostingService {
 
         return "/file/" + fileName;
     }
+
     public List<Posting> findAll() {
         return postingRepository.findAll();
     }
