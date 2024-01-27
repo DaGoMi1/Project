@@ -25,7 +25,6 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/login_process",
                                 "/register", "/register-process",
                                 "/CSS/**", "/JS/**").permitAll()
-                        .requestMatchers("/notice/write").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 );
 
