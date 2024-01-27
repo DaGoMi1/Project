@@ -12,40 +12,31 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringConfig {
 
-    private final EntityManager em;
+    private final SpringDataJpaPostingRepository springDataJpaPostingRepository;
+    private final SpringDataJpaMemberRepository springDataJpaMemberRepository;
+    private final SpringDataJpaScheduleRepository springDataJpaScheduleRepository;
 
     @Autowired
-    public SpringConfig(EntityManager em) {
-        this.em = em;
+    public SpringConfig(SpringDataJpaPostingRepository springDataJpaPostingRepository,
+                        SpringDataJpaMemberRepository springDataJpaMemberRepository,
+                        SpringDataJpaScheduleRepository springDataJpaScheduleRepository) {
+        this.springDataJpaPostingRepository = springDataJpaPostingRepository;
+        this.springDataJpaMemberRepository = springDataJpaMemberRepository;
+        this.springDataJpaScheduleRepository = springDataJpaScheduleRepository;
     }
 
     @Bean
     public MemberService memberService() {
-        return new MemberService(memberRepository());
+        return new MemberService(springDataJpaMemberRepository);
     }
 
     @Bean
     public PostingService postingService() {
-        return new PostingService(postingRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        return new JpaMemberRepository(em);
-    }
-
-    @Bean
-    public PostingRepository postingRepository() {
-        return new JpaPostingRepository(em);
+        return new PostingService(springDataJpaPostingRepository);
     }
 
     @Bean
     public ScheduleService scheduleService() {
-        return new ScheduleService(scheduleRepository());
-    }
-
-    @Bean
-    public ScheduleRepository scheduleRepository() {
-        return new JpaScheduleRepository(em);
+        return new ScheduleService(springDataJpaScheduleRepository);
     }
 }
