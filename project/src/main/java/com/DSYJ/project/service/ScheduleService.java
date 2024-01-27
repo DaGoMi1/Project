@@ -1,22 +1,20 @@
 package com.DSYJ.project.service;
 
-import com.DSYJ.project.controller.ScheduleDTO;
 import com.DSYJ.project.domain.Schedule;
-import com.DSYJ.project.repository.ScheduleRepository;
+import com.DSYJ.project.repository.SpringDataJpaScheduleRepository;
 import jakarta.transaction.Transactional;
 
 @Transactional
 public class ScheduleService {
 
-    private final ScheduleRepository scheduleRepository;
+    private final SpringDataJpaScheduleRepository scheduleRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
+    public ScheduleService(SpringDataJpaScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 
 
-    public long scheduleSave(Schedule schedule){
+    public void scheduleSave(Schedule schedule){
         scheduleRepository.save(schedule);
-        return schedule.getId();
     }
 }
