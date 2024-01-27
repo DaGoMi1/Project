@@ -1,11 +1,15 @@
 package com.DSYJ.project.service;
 
-import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.domain.Posting;
-import com.DSYJ.project.repository.PostingRepository;
+import com.DSYJ.project.repository.SpringDataJpaPostingRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +19,10 @@ import java.util.UUID;
 @Transactional
 public class PostingService {
 
-    private final PostingRepository postingRepository;
+    private final SpringDataJpaPostingRepository postingRepository;
 
-    public PostingService(PostingRepository postingRepository) {
+    @Autowired
+    public PostingService(SpringDataJpaPostingRepository postingRepository) {
         this.postingRepository = postingRepository;
     }
 
@@ -29,6 +34,15 @@ public class PostingService {
         Posting existingPosting = postingRepository.findById(updatePosting.getId())
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
+        existingPosting.setTitle(updatePosting.getTitle());
+        existingPosting.setAuthor(updatePosting.getAuthor());
+        existingPosting.setContent(updatePosting.getContent());
+        existingPosting.setImage(updatePosting.getImage());
+        existingPosting.setVideo(updatePosting.getVideo());
+        existingPosting.setFile(updatePosting.getFile());
+        existingPosting.setLink(updatePosting.getLink());
+        existingPosting.setCreated_At(LocalDateTime.now());
+
         postingRepository.save(existingPosting);
     }
 
@@ -36,34 +50,44 @@ public class PostingService {
         return postingRepository.findById(id);
     }
 
-    public String saveImage(MultipartFile image) {
-        // 이미지를 저장하는 로직
-        // 예시: 서버의 특정 경로에 이미지를 저장하고 해당 파일의 URL을 반환
-        // 이때 파일명은 중복을 피하기 위해 유니크한 이름으로 저장하는 것이 좋습니다.
-        // 예시에서는 현재 시간을 기반으로 한 이름을 사용
+    public String saveImage(MultipartFile image) throws IOException {
         String fileName = UUID.randomUUID().toString() + ".png";
         String filePath = "src/main/resources/static/IMG/" + fileName;
 
-        // 실제로는 File I/O 또는 이미지 업로드 라이브러리 등을 사용하여 저장하는 로직을 추가해야 합니다.
+        // 이미지를 서버에 저장
+        Path destination = Paths.get(filePath);
+        FileCopyUtils.copy(image.getBytes(), destination.toFile());
 
-        return "/IMG/" + fileName; // 이미지 파일의 URL 반환
+        return "/IMG/" + fileName;
     }
 
-    public String saveVideo(MultipartFile video) {
+    public String saveVideo(MultipartFile video) throws IOException {
         String fileName = "video_" + System.currentTimeMillis() + ".avi";
         String filePath = "/path/to/file/directory/" + fileName;
+
+        // 비디오를 서버에 저장
+        Path destination = Paths.get(filePath);
+        FileCopyUtils.copy(video.getBytes(), destination.toFile());
 
         return "/file/" + fileName;
     }
 
-    public String saveFile(MultipartFile file) {
+    public String saveFile(MultipartFile file) throws IOException {
         String fileName = "file_" + System.currentTimeMillis() + ".pdf";
         String filePath = "/path/to/file/directory/" + fileName;
+
+        // 파일을 서버에 저장
+        Path destination = Paths.get(filePath);
+        FileCopyUtils.copy(file.getBytes(), destination.toFile());
 
         return "/file/" + fileName;
     }
 
     public List<Posting> findAll() {
         return postingRepository.findAll();
+    }
+
+    public void deletePost(Long id){
+        postingRepository.deleteById(id);
     }
 }

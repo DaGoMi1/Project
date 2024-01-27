@@ -37,6 +37,11 @@
         <input type="submit" class="write" value="수정">
     </form>
 
+    <form th:if="${posting.getUserId() == userId}" action="/notice/delete" method="post">
+        <input type="hidden" name="postId" th:value="${posting.id}" />
+        <input type="submit" class="write" value="삭제">
+    </form>
+
     <input th:unless="${posting.getUserId() == userId}" type="submit" class="write" style="display: none;">
 
 </div>
