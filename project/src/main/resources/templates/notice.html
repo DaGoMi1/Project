@@ -19,15 +19,14 @@
             <table>
                 <thead>
                 <tr>
-                    <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성 날짜</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="notice : ${notice} "  th:attr="data-href=@{'/notice/notice/' + ${notice.id}}" onclick="window.location.href = this.getAttribute('data-href');">
-                    <td th:text="${notice.id}"></td>
+                <tr th:each="notice, iterStat : ${notice}" th:attr="data-href=@{'/notice/notice/' + ${notice.id}}" onclick="window.location.href = this.getAttribute('data-href');">
+                    <!-- 번호 칼럼 제거 -->
                     <td th:text="${notice.title}"></td>
                     <td th:text="${notice.author}"></td>
                     <td th:text="${notice.created_At}"></td>

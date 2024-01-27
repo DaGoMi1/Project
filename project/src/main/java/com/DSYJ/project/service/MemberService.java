@@ -3,11 +3,10 @@ package com.DSYJ.project.service;
 
 import com.DSYJ.project.domain.Member;
 import com.DSYJ.project.dto.CustomUserDetails;
-import com.DSYJ.project.repository.MemberRepository;
+import com.DSYJ.project.repository.SpringDataJpaMemberRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,12 +17,13 @@ import java.util.Optional;
 
 @Transactional
 public class MemberService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+    private final SpringDataJpaMemberRepository memberRepository;
 
     @Autowired @Lazy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public MemberService(MemberRepository memberRepository) {
+    @Autowired
+    public MemberService(SpringDataJpaMemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 

@@ -60,6 +60,7 @@ public class NoticeController {
     @PostMapping("/save_edit")
     public String saveEdit(@ModelAttribute PostingForm form) {
         Posting updatedPosting = new Posting();
+
         updatedPosting.setId(form.getId());
         updatedPosting.setAuthor(form.getAuthor());
         updatedPosting.setTitle(form.getTitle());
@@ -98,5 +99,11 @@ public class NoticeController {
         model.addAttribute("posting", existingPosting);
         model.addAttribute("editable", true);  // 수정 가능한 상태로 설정
         return "write";
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(@RequestParam("postId") Long postId){
+        postingService.deletePost(postId);
+        return "redirect:/notice/notice";
     }
 }
