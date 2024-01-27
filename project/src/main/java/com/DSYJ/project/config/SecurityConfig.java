@@ -25,12 +25,12 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/login_process",
                                 "/register", "/register-process",
                                 "/CSS/**", "/JS/**").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/notice/write").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 );
 
         http
-                .formLogin((auth)->auth.loginPage("/login")
+                .formLogin((auth) -> auth.loginPage("/login")
                         .loginProcessingUrl("/loginProc")
                         .failureUrl("/login-error")
                         .defaultSuccessUrl("/")
@@ -41,7 +41,7 @@ public class SecurityConfig {
                 );
 
         http
-                .logout((auth)->auth
+                .logout((auth) -> auth
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)

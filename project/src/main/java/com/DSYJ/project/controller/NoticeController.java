@@ -5,6 +5,7 @@ import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.PostingService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,11 +39,17 @@ public class NoticeController {
     }
 
     @GetMapping("/write")
-    public String write(Model model) {
-        // 빈 폼을 렌더링하기 위해 빈 Posting 객체를 전달
-        model.addAttribute("posting", new Posting());
-        model.addAttribute("editable", false);  // 수정 가능한 상태로 설정
-        return "write";
+    public String write(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
+        if (customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // 현재 사용자가 ADMIN인 경우에만 글쓰기 페이지로 이동
+            // 빈 폼을 렌더링하기 위해 빈 Posting 객체를 전달
+            model.addAttribute("posting", new Posting());
+            model.addAttribute("editable", false);  // 수정 가능한 상태로 설정
+            return "write";
+        } else {
+            // 그 외의 경우에는 접근 거부 페이지 또는 다른 처리
+            return "access-denied";
+        }
     }
 
     @PostMapping("/submit_notice")
