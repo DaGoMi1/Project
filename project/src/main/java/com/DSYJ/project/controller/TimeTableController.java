@@ -20,7 +20,6 @@ public class TimeTableController {
         this.scheduleService = scheduleService;
     }
 
-
     @GetMapping("")
     public String timeTable() {
         return "timetable";
