@@ -87,6 +87,10 @@ public class PostingService {
         return postingRepository.findAll();
     }
 
+    public List<Posting> findByBoardType(String boardType) {
+        return postingRepository.findByBoardType(boardType);
+    }
+
     public void deletePost(Long id){
         postingRepository.deleteById(id);
     }
