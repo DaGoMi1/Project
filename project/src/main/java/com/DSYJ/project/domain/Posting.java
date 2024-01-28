@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -31,6 +30,16 @@ public class Posting {
     private String link;
 
     private LocalDateTime created_At;
+
+    private String boardType;
+
+    public String getBoardType() {
+        return boardType;
+    }
+
+    public void setBoardType(String boardType) {
+        this.boardType = boardType;
+    }
 
     public LocalDateTime getCreated_At() {
         return created_At;
