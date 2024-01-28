@@ -33,6 +33,9 @@ public class MemberService implements UserDetailsService {
 
         member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
         member.setRole("ROLE_USER");
+        if(member.getUserId().equals("DSYJ")){
+            member.setRole("ROLE_ADMIN");
+        }
 
         memberRepository.save(member);
 
