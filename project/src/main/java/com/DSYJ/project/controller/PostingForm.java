@@ -19,14 +19,14 @@ public class PostingForm {
 
     private String link;
 
-    private String board_type;
+    private String boardType;
 
-    public String getBoard_type() {
-        return board_type;
+    public String getBoardType() {
+        return boardType;
     }
 
-    public void setBoard_type(String board_type) {
-        this.board_type = board_type;
+    public void setBoardType(String boardType) {
+        this.boardType = boardType;
     }
 
     public void setId(Long id) {
