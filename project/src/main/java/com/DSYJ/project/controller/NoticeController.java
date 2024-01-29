@@ -28,8 +28,9 @@ public class NoticeController {
     public String notice(Model model) {
         List<Posting> notice = postingService.findByBoardType("notice");
 
-        model.addAttribute("notice", notice);
-        return "notice";
+        model.addAttribute("postings", notice);
+        model.addAttribute("boardType", "notice");
+        return "boardList";
     }
 
     @GetMapping("/vote")
@@ -41,10 +42,11 @@ public class NoticeController {
     public String write(@AuthenticationPrincipal CustomUserDetails customUserDetails, Model model) {
         if (customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
             // 현재 사용자가 ADMIN인 경우에만 글쓰기 페이지로 이동
+            Posting posting = new Posting();
+            posting.setBoardType("notice");
             // 빈 폼을 렌더링하기 위해 빈 Posting 객체를 전달
-            model.addAttribute("posting", new Posting());
+            model.addAttribute("posting", posting);
             model.addAttribute("editable", false);  // 수정 가능한 상태로 설정
-            model.addAttribute("boardType","notice");
             return "write";
         } else {
             // 그 외의 경우에는 접근 거부 페이지 또는 다른 처리
@@ -52,7 +54,7 @@ public class NoticeController {
         }
     }
 
-    @PostMapping("/submit_notice")
+    @PostMapping("/submit_post")
     public String submitNotice(@ModelAttribute("postForm") Posting posting) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -94,7 +96,7 @@ public class NoticeController {
         model.addAttribute("posting", posting);
 
         // 상세 보기 페이지로 이동
-        return "noticeDetail";
+        return "boardDetail";
     }
 
     @GetMapping("/edit")
@@ -110,7 +112,7 @@ public class NoticeController {
     }
 
     @PostMapping("/delete")
-    public String deletePost(@RequestParam("postId") Long postId){
+    public String deletePost(@RequestParam("postId") Long postId) {
         postingService.deletePost(postId);
         return "redirect:/notice/notice";
     }
