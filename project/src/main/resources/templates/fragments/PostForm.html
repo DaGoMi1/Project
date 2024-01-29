@@ -1,8 +1,10 @@
-<form th:fragment="PostForm"
-      th:object="${PostingForm}"
-      th:action="${editable ? '/notice/save_edit' : '/notice/submit_notice'}" method="post">
+<form th:fragment="PostForm(posting, boardType, editable)"
+      th:object="${posting}"
+      th:with="boardPath=${posting.boardType eq 'notice' ? 'notice' : 'board'}, postAction=${editable ? '/save_edit' : '/submit_post'}"
+      th:action="@{'/' + ${boardPath} + ${postAction}}" method="post">
 
     <input type="hidden" id="id" name="id" th:value="${posting.id}" />
+    <input type="hidden" id="type" name="boardType" th:value="${posting.boardType}" />
 
     <label for="title">제목:</label>
     <input type="text" id="title" name="title" th:value="${posting.title}" required><br>
