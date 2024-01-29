@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Document</title>
-    <link rel="stylesheet" href="/CSS/home.css" />
+    <link rel="stylesheet" href="/CSS/home.css"/>
     <script src="https://kit.fontawesome.com/f668b9b848.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -13,8 +13,8 @@
 
 <main class="main">
     <div class="wrap">
-        <br />
-        <h1 style="text-align: center; font-size: 40px">공지사항</h1>
+        <br/>
+        <h1 style="text-align: center; font-size: 40px" th:text="${boardType}"></h1>
         <div class="table">
             <table>
                 <thead>
@@ -25,18 +25,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="notice, iterStat : ${notice}" th:attr="data-href=@{'/notice/notice/' + ${notice.id}}" onclick="window.location.href = this.getAttribute('data-href');">
+                <tr th:each="posting, iterStat : ${postings}" th:attr="data-href=@{'/board/board/' + ${posting.id}}"
+                    onclick="window.location.href = this.getAttribute('data-href');">
                     <!-- 번호 칼럼 제거 -->
-                    <td th:text="${notice.title}"></td>
-                    <td th:text="${notice.author}"></td>
-                    <td th:text="${notice.created_At}"></td>
+                    <td th:text="${posting.title}"></td>
+                    <td th:text="${posting.author}"></td>
+                    <td th:text="${posting.created_At}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <div>
             <button class="write">
-                <a th:href="@{/notice/write}">글쓰기</a>
+                <a th:href="@{${boardType == 'notice' ? '/notice/write' : '/board/write'}}">글쓰기</a>
             </button>
         </div>
     </div>
