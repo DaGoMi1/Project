@@ -34,10 +34,11 @@ public class BoardController {
 
     @GetMapping("/write")
     public String write(@RequestParam(name = "boardType") String boardType, Model model) {
+        Posting posting = new Posting();
+        posting.setBoardType(boardType);
         // 빈 폼을 렌더링하기 위해 빈 Posting 객체를 전달
-        model.addAttribute("posting", new Posting());
+        model.addAttribute("posting", posting);
         model.addAttribute("editable", false);  // 수정 가능한 상태로 설정
-        model.addAttribute("boardType", boardType);
         return "write";
     }
 
