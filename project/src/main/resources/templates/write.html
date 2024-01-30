@@ -19,7 +19,45 @@
         <span th:case="*" th:utext="${posting.boardType} 글쓰기"></span>
     </span>
 </h1>
-<div id="postForm-load" th:replace="~{fragments/PostForm :: PostForm(posting=${posting})}"></div>
+
+<form th:object="${posting}"
+      th:action="@{'/' + ${posting.boardType eq 'notice' ? 'notice' : 'board'}
+                + ${editable ? '/save_edit' : '/submit_post'}}" method="post">
+
+    <!-- Hidden fields -->
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{boardType}" />
+
+    <!-- Title -->
+    <label for="title">제목:</label>
+    <input type="text" id="title" th:field="*{title}" required><br>
+
+    <!-- Author -->
+    <label for="author">글쓴이:</label>
+    <input type="text" id="author" th:field="*{author}" required><br>
+
+    <!-- Content -->
+    <label for="content">작성글:</label>
+    <textarea id="content" th:field="*{content}" rows="5" cols="40" required></textarea><br>
+
+    <!-- Image -->
+    <label for="image">사진 추가:</label>
+    <input type="text" id="image" th:field="*{image}" placeholder="이미지 경로 입력"><br>
+
+    <!-- Video -->
+    <label for="video">동영상 추가:</label>
+    <input type="text" id="video" th:field="*{video}" placeholder="동영상 경로 입력"><br>
+
+    <!-- File -->
+    <label for="file">파일 추가:</label>
+    <input type="text" id="file" th:field="*{file}" placeholder="파일 경로 입력"><br>
+
+    <!-- Link -->
+    <label for="link">링크 추가:</label>
+    <input type="url" id="link" th:field="*{link}"><br>
+
+    <input type="submit" class="write" value="등록">
+</form>
 
 <script src="/JS/home.js"></script>
 </body>
