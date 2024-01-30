@@ -1,5 +1,4 @@
-<form th:fragment="PostForm(posting, boardType, editable)"
-      th:object="${posting}"
+<form th:fragment="PostForm(posting)"
       th:with="boardPath=${posting.boardType eq 'notice' ? 'notice' : 'board'}, postAction=${editable ? '/save_edit' : '/submit_post'}"
       th:action="@{'/' + ${boardPath} + ${postAction}}" method="post">
 
