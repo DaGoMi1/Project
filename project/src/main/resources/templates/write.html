@@ -11,7 +11,7 @@
 <div id="nav-load" th:insert="~{fragments/Navigation :: Navigation}"></div>
 
 <h1>공지 글쓰기</h1>
-<div id="postForm-load" th:insert="~{fragments/PostForm :: PostForm}" th:with="posting=${posting}"></div>
+<div id="postForm-load" th:replace="~{fragments/PostForm :: PostForm(posting=${posting})}"></div>
 
 <script src="/JS/home.js"></script>
 </body>
