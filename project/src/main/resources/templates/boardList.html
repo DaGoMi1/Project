@@ -37,7 +37,7 @@
         </div>
         <div>
             <button class="write">
-                <a th:href="@{${boardType == 'notice' ? '/notice/write' : '/board/write'}}">글쓰기</a>
+                <a th:href="@{${boardType == 'notice' ? '/notice/write' : '/board/write?boardType=' + boardType}}">글쓰기</a>
             </button>
         </div>
     </div>
