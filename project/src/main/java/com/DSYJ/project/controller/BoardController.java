@@ -3,6 +3,7 @@ package com.DSYJ.project.controller;
 import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.PostingService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -60,14 +61,7 @@ public class BoardController {
     public String saveEdit(@ModelAttribute PostingForm form) {
         Posting updatedPosting = new Posting();
 
-        updatedPosting.setId(form.getId());
-        updatedPosting.setAuthor(form.getAuthor());
-        updatedPosting.setTitle(form.getTitle());
-        updatedPosting.setContent(form.getContent());
-        updatedPosting.setImage(form.getImage());
-        updatedPosting.setVideo(form.getVideo());
-        updatedPosting.setFile(form.getFile());
-        updatedPosting.setLink(form.getLink());
+        BeanUtils.copyProperties(form, updatedPosting);
         updatedPosting.setCreated_At(LocalDateTime.now());
 
         String boardType = form.getBoardType();

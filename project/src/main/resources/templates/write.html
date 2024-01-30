@@ -10,7 +10,15 @@
 <div id="member-load" th:insert="~{fragments/MemberInformation :: MemberInformation}"></div>
 <div id="nav-load" th:insert="~{fragments/Navigation :: Navigation}"></div>
 
-<h1>공지 글쓰기</h1>
+<h1>
+    <span th:switch="${posting.boardType}">
+        <span th:case="'notice'">공지 글쓰기</span>
+        <span th:case="'free'">자유 글쓰기</span>
+        <span th:case="'rental'">대여 글쓰기</span>
+        <!-- 기본 값 처리 (optional) -->
+        <span th:case="*" th:utext="${posting.boardType} 글쓰기"></span>
+    </span>
+</h1>
 <div id="postForm-load" th:replace="~{fragments/PostForm :: PostForm(posting=${posting})}"></div>
 
 <script src="/JS/home.js"></script>

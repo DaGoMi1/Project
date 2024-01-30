@@ -14,7 +14,15 @@
 <main class="main">
     <div class="wrap">
         <br/>
-        <h1 style="text-align: center; font-size: 40px" th:text="${boardType}"></h1>
+        <h1 style="text-align: center; font-size: 40px">
+    <span th:switch="${boardType}">
+        <span th:case="'notice'">공지사항</span>
+        <span th:case="'free'">자유게시판</span>
+        <span th:case="'rental'">대여게시판</span>
+        <!-- 기본 값 처리 (optional) -->
+        <span th:case="*" th:utext="${boardType}"></span>
+    </span>
+        </h1>
         <div class="table">
             <table>
                 <thead>
