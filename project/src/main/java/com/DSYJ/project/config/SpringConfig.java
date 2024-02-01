@@ -1,6 +1,7 @@
 package com.DSYJ.project.config;
 
 import com.DSYJ.project.repository.*;
+import com.DSYJ.project.service.CommentService;
 import com.DSYJ.project.service.MemberService;
 import com.DSYJ.project.service.PostingService;
 import com.DSYJ.project.service.ScheduleService;
@@ -15,16 +16,23 @@ public class SpringConfig {
     private final SpringDataJpaPostingRepository springDataJpaPostingRepository;
     private final SpringDataJpaMemberRepository springDataJpaMemberRepository;
     private final SpringDataJpaScheduleRepository springDataJpaScheduleRepository;
+    private final SpringDataJpaCommentRepository springDataJpaCommentRepository;
 
     @Autowired
     public SpringConfig(SpringDataJpaPostingRepository springDataJpaPostingRepository,
                         SpringDataJpaMemberRepository springDataJpaMemberRepository,
-                        SpringDataJpaScheduleRepository springDataJpaScheduleRepository) {
+                        SpringDataJpaScheduleRepository springDataJpaScheduleRepository,
+                        SpringDataJpaCommentRepository springDataJpaCommentRepository) {
         this.springDataJpaPostingRepository = springDataJpaPostingRepository;
         this.springDataJpaMemberRepository = springDataJpaMemberRepository;
         this.springDataJpaScheduleRepository = springDataJpaScheduleRepository;
+        this.springDataJpaCommentRepository = springDataJpaCommentRepository;
     }
 
+    @Bean
+    public CommentService commentService(){
+        return new CommentService(springDataJpaCommentRepository);
+    }
     @Bean
     public MemberService memberService() {
         return new MemberService(springDataJpaMemberRepository);

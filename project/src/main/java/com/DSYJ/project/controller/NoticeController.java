@@ -83,7 +83,7 @@ public class NoticeController {
 
     @GetMapping("/notice/{id}")
     public String viewNotice(@PathVariable Long id, Model model) {
-        Optional<Posting> postingOptional = postingService.postId(id);
+        Optional<Posting> postingOptional = postingService.findById(id);
 
         // Optional이 값이 있는 경우에만 모델에 추가
         Posting posting = postingOptional.orElse(null);
@@ -96,7 +96,7 @@ public class NoticeController {
     @GetMapping("/edit")
     public String editNotice(@RequestParam("postId") Long postId, Model model) {
         // postId를 사용하여 게시글 정보를 가져오는 코드
-        Posting existingPosting = postingService.postId(postId)
+        Posting existingPosting = postingService.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 게시글을 찾을 수 없습니다: " + postId));
         ; // 이 메서드는 게시글 ID로 게시글을 조회하는 메서드로 가정
 

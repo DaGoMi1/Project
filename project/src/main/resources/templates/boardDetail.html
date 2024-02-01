@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/CSS/home.css" />
     <script src="https://kit.fontawesome.com/f668b9b848.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body th:with="loggedInUserId=${loggedInUserId}, loggedInUserName=${loggedInUserName}">
 <div id="member-load" th:insert="~{fragments/MemberInformation :: MemberInformation}"></div>
 <div id="nav-load" th:insert="~{fragments/Navigation :: Navigation}"></div>
 
@@ -32,26 +32,53 @@
 
     <p>작성일시: <span th:text="${posting.created_at}"></span></p>
 
-    <form th:with="userId=${userId}"
-          th:if="${posting.getUserId() eq userId}"
+    <form th:if="${posting.getUserId() eq loggedInUserId}"
           th:action="@{'/' + ${posting.boardType eq 'notice' ? 'notice' : 'board'} + '/edit'}" method="get">
 
         <input type="hidden" name="postId" th:value="${posting.id}" />
         <input type="submit" class="write" value="수정">
     </form>
 
-    <form th:with="userId=${userId}"
-          th:if="${posting.getUserId() eq userId}"
+    <form th:if="${posting.getUserId() eq loggedInUserId}"
           th:action="@{'/' + ${posting.boardType eq 'notice' ? 'notice' : 'board'} + '/delete'}" method="post">
 
         <input type="hidden" name="postId" th:value="${posting.id}" />
         <input type="submit" class="write" value="삭제">
     </form>
 
-    <input th:with="userId=${userId}"
-           th:unless="${posting.getUserId() == userId}" type="submit" class="write" style="display: none;">
+    <input th:unless="${posting.getUserId() eq loggedInUserId}" type="submit" class="write" style="display: none;">
 
 </div>
+
+<div>
+    <h3>댓글</h3>
+    <ul th:each="comment : ${comments}">
+        <li>
+            <p th:text="${loggedInUserName} + ': ' + ${comment.comment}"></p>
+            <small th:text="${comment.createdDate}"></small>
+
+            <button th:if="${posting.getUserId() eq loggedInUserId}"
+                    th:onclick="'deleteComment(' + ${comment.id} + ')'"
+                    class="write">삭제</button>
+
+            <!-- 댓글 작성자와 현재 사용자가 다를 경우 숨겨진 삭제 버튼 -->
+            <button th:unless="${posting.getUserId() eq loggedInUserId}" type="button" class="write" style="display: none;">
+                숨겨진 삭제 버튼
+            </button>
+        </li>
+    </ul>
+
+    <!-- 댓글 추가 폼 -->
+    <form th:action="@{'/board/addComment'}" method="post">
+        <input type="hidden" name="postId" th:value="${posting.id}" />
+        <input type="hidden" name="userId" th:value="${loggedInUserId}" />
+        <label>
+            <textarea name="comment" required></textarea>
+        </label>
+        <input type="submit" value="댓글 추가" />
+    </form>
+</div>
+
 <script src="/JS/home.js"></script>
 </body>
 </html>

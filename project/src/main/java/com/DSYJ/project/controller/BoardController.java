@@ -1,7 +1,9 @@
 package com.DSYJ.project.controller;
 
+import com.DSYJ.project.domain.Comment;
 import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.dto.CustomUserDetails;
+import com.DSYJ.project.service.CommentService;
 import com.DSYJ.project.service.PostingService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
@@ -19,9 +21,11 @@ import java.util.Optional;
 public class BoardController {
 
     private final PostingService postingService;
+    private final CommentService commentService;
 
-    public BoardController(PostingService postingService) {
+    public BoardController(PostingService postingService, CommentService commentService) {
         this.postingService = postingService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/{boardType}")
@@ -74,11 +78,14 @@ public class BoardController {
 
     @GetMapping("/board/{id}")
     public String viewFree(@PathVariable Long id, Model model) {
-        Optional<Posting> postingOptional = postingService.postId(id);
+        Optional<Posting> postingOptional = postingService.findById(id);
 
         // Optional이 값이 있는 경우에만 모델에 추가
         Posting posting = postingOptional.orElse(null);
         model.addAttribute("posting", posting);
+
+        List<Comment> comments =commentService.findByPostingId(id);
+        model.addAttribute("comments",comments);
 
         // 상세 보기 페이지로 이동
         return "boardDetail";
@@ -87,7 +94,7 @@ public class BoardController {
     @GetMapping("/edit")
     public String editPost(@RequestParam("postId") Long postId, Model model) {
         // postId를 사용하여 게시글 정보를 가져오는 코드
-        Posting existingPosting = postingService.postId(postId)
+        Posting existingPosting = postingService.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 게시글을 찾을 수 없습니다: " + postId));
         ; // 이 메서드는 게시글 ID로 게시글을 조회하는 메서드로 가정
 
@@ -98,10 +105,27 @@ public class BoardController {
 
     @PostMapping("/delete")
     public String deletePost(@RequestParam("postId") Long postId) {
-        Optional<Posting> optionalPosting = postingService.postId(postId);
+        Optional<Posting> optionalPosting = postingService.findById(postId);
 
         String boardType = optionalPosting.map(Posting::getBoardType).orElse("defaultBoardType");
         postingService.deletePost(postId);
         return "redirect:/board/" + boardType;
+    }
+
+    @PostMapping("/addComment")
+    public String addComment(@RequestParam Long postId, @RequestParam String userId, @RequestParam String comment){
+        Posting posting = postingService.findById(postId).orElse(null);
+
+        if (posting != null) {
+            Comment newComment = new Comment();
+            newComment.setPosting(posting);
+            newComment.setUserId(userId);
+            newComment.setComment(comment);
+            newComment.setCreatedDate(LocalDateTime.now());
+
+            commentService.save(newComment);
+        }
+
+        return "redirect:/board/board/" + postId;
     }
 }

@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @Transactional
 public class PostingService {
-
     private final SpringDataJpaPostingRepository postingRepository;
 
     @Autowired
@@ -46,7 +45,7 @@ public class PostingService {
         postingRepository.save(existingPosting);
     }
 
-    public Optional<Posting> postId(Long id) {
+    public Optional<Posting> findById(Long id) {
         return postingRepository.findById(id);
     }
 

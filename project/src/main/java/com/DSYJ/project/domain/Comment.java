@@ -1,6 +1,7 @@
 package com.DSYJ.project.domain;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ public class Comment {
     @JoinColumn(name = "posting_id")
     private Posting posting;
     private String userId;
-    private String createdDate;
+    private LocalDateTime createdDate;
     private String modifiedDate;
 
     public String getModifiedDate() {
@@ -25,11 +26,11 @@ public class Comment {
         this.modifiedDate = modifiedDate;
     }
 
-    public String getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
