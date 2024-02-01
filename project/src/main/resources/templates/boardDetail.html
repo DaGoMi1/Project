@@ -30,7 +30,7 @@
     <!-- 링크 -->
     <a th:if="${posting.link != null}" th:href="${posting.link}" target="_blank">링크 바로가기</a>
 
-    <p>작성일시: <span th:text="${posting.created_At}"></span></p>
+    <p>작성일시: <span th:text="${posting.created_at}"></span></p>
 
     <form th:with="userId=${userId}"
           th:if="${posting.getUserId() eq userId}"

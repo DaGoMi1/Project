@@ -50,7 +50,7 @@ public class BoardController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         posting.setUserId(userDetails.getUsername());
-        posting.setCreated_At(LocalDateTime.now());
+        posting.setCreated_at(LocalDateTime.now());
         posting.setBoardType(boardType);
 
         postingService.postSave(posting);
@@ -62,7 +62,7 @@ public class BoardController {
         Posting updatedPosting = new Posting();
 
         BeanUtils.copyProperties(form, updatedPosting);
-        updatedPosting.setCreated_At(LocalDateTime.now());
+        updatedPosting.setCreated_at(LocalDateTime.now());
 
         String boardType = form.getBoardType();
 
