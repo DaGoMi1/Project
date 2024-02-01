@@ -41,7 +41,7 @@ public class PostingService {
         existingPosting.setVideo(updatePosting.getVideo());
         existingPosting.setFile(updatePosting.getFile());
         existingPosting.setLink(updatePosting.getLink());
-        existingPosting.setCreated_At(LocalDateTime.now());
+        existingPosting.setCreated_at(LocalDateTime.now());
 
         postingRepository.save(existingPosting);
     }

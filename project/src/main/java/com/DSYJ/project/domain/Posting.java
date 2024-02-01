@@ -1,17 +1,15 @@
 package com.DSYJ.project.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Posting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String userId;
 
@@ -29,9 +27,21 @@ public class Posting {
 
     private String link;
 
-    private LocalDateTime created_At;
+    private LocalDateTime created_at;
 
     private String boardType;
+
+    @OneToMany(mappedBy = "posting", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("id asc")
+    private List<Comment> comments;
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public String getBoardType() {
         return boardType;
@@ -41,20 +51,20 @@ public class Posting {
         this.boardType = boardType;
     }
 
-    public LocalDateTime getCreated_At() {
-        return created_At;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setCreated_At(LocalDateTime created_At) {
-        this.created_At = created_At;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getLink() {
