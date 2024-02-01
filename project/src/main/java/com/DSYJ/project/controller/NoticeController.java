@@ -61,7 +61,7 @@ public class NoticeController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         posting.setUserId(userDetails.getUsername());
-        posting.setCreated_At(LocalDateTime.now());
+        posting.setCreated_at(LocalDateTime.now());
         posting.setBoardType("notice");
 
         postingService.postSave(posting);
@@ -73,7 +73,7 @@ public class NoticeController {
         Posting updatedPosting = new Posting();
 
         BeanUtils.copyProperties(form, updatedPosting);
-        updatedPosting.setCreated_At(LocalDateTime.now());
+        updatedPosting.setCreated_at(LocalDateTime.now());
 
         // 저장된 게시글 업데이트
         postingService.postUpdate(updatedPosting);
