@@ -33,7 +33,7 @@ public class BoardController {
         List<Posting> postings = postingService.findByBoardType(boardType);
         model.addAttribute("postings", postings);
         model.addAttribute("boardType", boardType);
-        return "boardList";  // "boardList"´Â °øÅëµÈ ºä ÆäÀÌÁö ÀÌ¸§À¸·Î °¡Á¤ÇÕ´Ï´Ù.
+        return "boardList";  // "boardList"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
     }
 
 
@@ -41,9 +41,9 @@ public class BoardController {
     public String write(@RequestParam(name = "boardType") String boardType, Model model) {
         Posting posting = new Posting();
         posting.setBoardType(boardType);
-        // ºó ÆûÀ» ·»´õ¸µÇÏ±â À§ÇØ ºó Posting °´Ã¼¸¦ Àü´Þ
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Posting ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         model.addAttribute("posting", posting);
-        model.addAttribute("editable", false);  // ¼öÁ¤ °¡´ÉÇÑ »óÅÂ·Î ¼³Á¤
+        model.addAttribute("editable", false);  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½
         return "write";
     }
 
@@ -70,7 +70,7 @@ public class BoardController {
 
         String boardType = form.getBoardType();
 
-        // ÀúÀåµÈ °Ô½Ã±Û ¾÷µ¥ÀÌÆ®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô½Ã±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         postingService.postUpdate(updatedPosting);
 
         return "redirect:/board/" + boardType;
@@ -80,26 +80,22 @@ public class BoardController {
     public String viewFree(@PathVariable Long id, Model model) {
         Optional<Posting> postingOptional = postingService.findById(id);
 
-        // OptionalÀÌ °ªÀÌ ÀÖ´Â °æ¿ì¿¡¸¸ ¸ðµ¨¿¡ Ãß°¡
         Posting posting = postingOptional.orElse(null);
         model.addAttribute("posting", posting);
 
-        List<Comment> comments =commentService.findByPostingId(id);
-        model.addAttribute("comments",comments);
+        List<Comment> comments = commentService.findByPostingId(id);
+        model.addAttribute("comments", comments);
 
-        // »ó¼¼ º¸±â ÆäÀÌÁö·Î ÀÌµ¿
         return "boardDetail";
     }
 
     @GetMapping("/edit")
     public String editPost(@RequestParam("postId") Long postId, Model model) {
-        // postId¸¦ »ç¿ëÇÏ¿© °Ô½Ã±Û Á¤º¸¸¦ °¡Á®¿À´Â ÄÚµå
         Posting existingPosting = postingService.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("ID¿¡ ÇØ´çÇÏ´Â °Ô½Ã±ÛÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù: " + postId));
-        ; // ÀÌ ¸Þ¼­µå´Â °Ô½Ã±Û ID·Î °Ô½Ã±ÛÀ» Á¶È¸ÇÏ´Â ¸Þ¼­µå·Î °¡Á¤
+                .orElseThrow(() -> new IllegalArgumentException("IDï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½Ô½Ã±ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½: " + postId));
 
         model.addAttribute("posting", existingPosting);
-        model.addAttribute("editable", true);  // ¼öÁ¤ °¡´ÉÇÑ »óÅÂ·Î ¼³Á¤
+        model.addAttribute("editable", true);
         return "write";
     }
 
@@ -113,7 +109,7 @@ public class BoardController {
     }
 
     @PostMapping("/addComment")
-    public String addComment(@RequestParam Long postId, @RequestParam String userId, @RequestParam String comment){
+    public String addComment(@RequestParam Long postId, @RequestParam String userId, @RequestParam String comment) {
         Posting posting = postingService.findById(postId).orElse(null);
 
         if (posting != null) {

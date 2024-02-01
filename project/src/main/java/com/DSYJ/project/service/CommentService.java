@@ -1,12 +1,10 @@
 package com.DSYJ.project.service;
 
 import com.DSYJ.project.domain.Comment;
-import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.repository.SpringDataJpaCommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CommentService {
     private final SpringDataJpaCommentRepository commentRepository;

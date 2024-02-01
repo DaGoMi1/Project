@@ -1,9 +1,9 @@
 package com.DSYJ.project.domain;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Comment {
@@ -17,7 +17,6 @@ public class Comment {
     private String userId;
     private LocalDateTime createdDate;
     private String modifiedDate;
-
     public String getModifiedDate() {
         return modifiedDate;
     }

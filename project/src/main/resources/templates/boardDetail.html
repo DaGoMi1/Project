@@ -56,10 +56,11 @@
         <li>
             <p th:text="${loggedInUserName} + ': ' + ${comment.comment}"></p>
             <small th:text="${comment.createdDate}"></small>
+
         </li>
     </ul>
 
-    <!-- 댓글 추가 폼 -->
+    <!-- 기본 댓글 추가 폼 -->
     <form th:action="@{'/board/addComment'}" method="post">
         <input type="hidden" name="postId" th:value="${posting.id}" />
         <input type="hidden" name="userId" th:value="${loggedInUserId}" />
