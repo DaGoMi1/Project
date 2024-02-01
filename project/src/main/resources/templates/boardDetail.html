@@ -56,15 +56,6 @@
         <li>
             <p th:text="${loggedInUserName} + ': ' + ${comment.comment}"></p>
             <small th:text="${comment.createdDate}"></small>
-
-            <button th:if="${posting.getUserId() eq loggedInUserId}"
-                    th:onclick="'deleteComment(' + ${comment.id} + ')'"
-                    class="write">삭제</button>
-
-            <!-- 댓글 작성자와 현재 사용자가 다를 경우 숨겨진 삭제 버튼 -->
-            <button th:unless="${posting.getUserId() eq loggedInUserId}" type="button" class="write" style="display: none;">
-                숨겨진 삭제 버튼
-            </button>
         </li>
     </ul>
 
