@@ -16,16 +16,16 @@
     <p>글 작성자: <span th:text="${posting.author}"></span></p>
     <p>글 내용: <span th:text="${posting.content}"></span></p>
     <!-- 이미지 렌더링 -->
-    <img th:if="${posting.image != null}" th:src="@{'/IMG/' + ${posting.image}}" alt="이미지">
+    <img th:if="${posting.imagePath != null}" th:src="@{'/IMG/' + ${posting.imagePath}}" alt="이미지">
 
     <!-- 비디오 렌더링 -->
-    <video th:if="${posting.video != null}" controls>
-        <source th:src="@{'/file/' + ${posting.video}}" type="video/avi">
+    <video th:if="${posting.videoPath != null}" controls>
+        <source th:src="@{'/file/' + ${posting.videoPath}}" type="video/avi">
         Your browser does not support the video tag.
     </video>
 
     <!-- 파일 다운로드 링크 -->
-    <a th:if="${posting.file != null}" th:href="@{'/file/' + ${posting.file}}" download>파일 다운로드</a>
+    <a th:if="${posting.filePath != null}" th:href="@{'/file/' + ${posting.filePath}}" download>파일 다운로드</a>
 
     <!-- 링크 -->
     <a th:if="${posting.link != null}" th:href="${posting.link}" target="_blank">링크 바로가기</a>
