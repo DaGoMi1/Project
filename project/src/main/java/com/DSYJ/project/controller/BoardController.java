@@ -5,6 +5,7 @@ import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.CommentService;
 import com.DSYJ.project.service.PostingService;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,33 +61,49 @@ public class BoardController {
         posting.setUserId(userDetails.getUsername());
         posting.setCreated_at(LocalDateTime.now());
         posting.setBoardType(boardType);
+        if (posting.getLink().isBlank()) {
+            posting.setLink(null);
+        }
 
-        // 파일 업로드 및 저장
-        String imagePath = postingService.saveImageAndReturnPath(image);
-        String videoPath = postingService.saveVideoAndReturnPath(video);
-        String filePath = postingService.saveFileAndReturnPath(file);
-
-        // 파일 경로를 엔터티에 설정
-        posting.setImagePath(imagePath);
-        posting.setVideoPath(videoPath);
-        posting.setFilePath(filePath);
+        // 파일 업데이트 메서드 호출
+        updateFilePaths(posting, image, video, file);
 
         postingService.postSave(posting);
         return "redirect:/board/" + boardType;
     }
 
     @PostMapping("/save_edit")
-    public String saveEdit(@ModelAttribute PostingForm form) {
+    public String saveEdit(@ModelAttribute PostingForm form,
+                           @RequestParam("image") MultipartFile image,
+                           @RequestParam("video") MultipartFile video,
+                           @RequestParam("file") MultipartFile file) {
         Posting updatedPosting = new Posting();
 
         BeanUtils.copyProperties(form, updatedPosting);
         updatedPosting.setCreated_at(LocalDateTime.now());
-
         String boardType = form.getBoardType();
+        if (updatedPosting.getLink().isBlank()) {
+            updatedPosting.setLink(null);
+        }
+
+        // 파일 업데이트 메서드 호출
+        updateFilePaths(updatedPosting, image, video, file);
 
         postingService.postUpdate(updatedPosting);
 
         return "redirect:/board/" + boardType;
+    }
+
+    private void updateFilePaths(Posting posting, MultipartFile image, MultipartFile video, MultipartFile file) {
+        // 파일 업로드 및 저장
+        String imagePath = StringUtils.isNotBlank(image.getOriginalFilename()) ? postingService.saveImageAndReturnPath(image) : null;
+        String videoPath = StringUtils.isNotBlank(video.getOriginalFilename()) ? postingService.saveVideoAndReturnPath(video) : null;
+        String filePath = StringUtils.isNotBlank(file.getOriginalFilename()) ? postingService.saveFileAndReturnPath(file) : null;
+
+        // 엔터티의 해당 필드 업데이트
+        posting.setImagePath(imagePath);
+        posting.setVideoPath(videoPath);
+        posting.setFilePath(filePath);
     }
 
     @GetMapping("/board/{id}")

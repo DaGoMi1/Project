@@ -3,6 +3,7 @@ package com.DSYJ.project.controller;
 import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.dto.CustomUserDetails;
 import com.DSYJ.project.service.PostingService;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,29 +58,59 @@ public class NoticeController {
     }
 
     @PostMapping("/submit_post")
-    public String submitNotice(@ModelAttribute("postForm") Posting posting) {
+    public String submitNotice(@ModelAttribute("postForm") Posting posting,
+                               @RequestParam("image") MultipartFile image,
+                               @RequestParam("video") MultipartFile video,
+                               @RequestParam("file") MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         posting.setUserId(userDetails.getUsername());
         posting.setCreated_at(LocalDateTime.now());
         posting.setBoardType("notice");
+        if (posting.getLink().isBlank()) {
+            posting.setLink(null);
+        }
+
+        // 파일 업데이트 메서드 호출
+        updateFilePaths(posting, image, video, file);
 
         postingService.postSave(posting);
         return "redirect:/notice/notice";
     }
 
     @PostMapping("/save_edit")
-    public String saveEdit(@ModelAttribute PostingForm form) {
+    public String saveEdit(@ModelAttribute PostingForm form,
+                           @RequestParam("image") MultipartFile image,
+                           @RequestParam("video") MultipartFile video,
+                           @RequestParam("file") MultipartFile file) {
         Posting updatedPosting = new Posting();
 
         BeanUtils.copyProperties(form, updatedPosting);
         updatedPosting.setCreated_at(LocalDateTime.now());
+        if (updatedPosting.getLink().isBlank()) {
+            updatedPosting.setLink(null);
+        }
+
+        // 파일 업데이트 메서드 호출
+        updateFilePaths(updatedPosting, image, video, file);
 
         // 저장된 게시글 업데이트
         postingService.postUpdate(updatedPosting);
 
         return "redirect:/notice/notice";
+    }
+
+    private void updateFilePaths(Posting posting, MultipartFile image, MultipartFile video, MultipartFile file) {
+        // 파일 업로드 및 저장
+        String imagePath = StringUtils.isNotBlank(image.getOriginalFilename()) ? postingService.saveImageAndReturnPath(image) : null;
+        String videoPath = StringUtils.isNotBlank(video.getOriginalFilename()) ? postingService.saveVideoAndReturnPath(video) : null;
+        String filePath = StringUtils.isNotBlank(file.getOriginalFilename()) ? postingService.saveFileAndReturnPath(file) : null;
+
+        // 엔터티의 해당 필드 업데이트
+        posting.setImagePath(imagePath);
+        posting.setVideoPath(videoPath);
+        posting.setFilePath(filePath);
     }
 
     @GetMapping("/notice/{id}")

@@ -11,11 +11,11 @@ public class PostingForm {
 
     private String content;
 
-    private String image;
+    private String imagePath;
 
-    private String video;
+    private String videoPath;
 
-    private String file;
+    private String filePath;
 
     private String link;
 
@@ -45,28 +45,28 @@ public class PostingForm {
         this.link = link;
     }
 
-    public String getFile() {
-        return file;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 
-    public String getVideo() {
-        return video;
+    public String getVideoPath() {
+        return videoPath;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
     }
 
-    public String getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getContent() {
