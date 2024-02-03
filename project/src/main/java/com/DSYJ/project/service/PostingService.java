@@ -8,8 +8,10 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +38,9 @@ public class PostingService {
         existingPosting.setTitle(updatePosting.getTitle());
         existingPosting.setAuthor(updatePosting.getAuthor());
         existingPosting.setContent(updatePosting.getContent());
-        existingPosting.setImage(updatePosting.getImage());
-        existingPosting.setVideo(updatePosting.getVideo());
-        existingPosting.setFile(updatePosting.getFile());
+        existingPosting.setImagePath(updatePosting.getImagePath());
+        existingPosting.setVideoPath(updatePosting.getVideoPath());
+        existingPosting.setFilePath(updatePosting.getFilePath());
         existingPosting.setLink(updatePosting.getLink());
         existingPosting.setCreated_at(LocalDateTime.now());
 
@@ -92,5 +94,59 @@ public class PostingService {
 
     public void deletePost(Long id){
         postingRepository.deleteById(id);
+    }
+
+    public String saveImageAndReturnPath(MultipartFile image) {
+        try {
+            String fileName = UUID.randomUUID() + ".png";
+            String filePath = "src/main/resources/static/IMG/" + fileName;
+
+            // 이미지를 서버에 저장
+            Path destinationDirectory = Paths.get("src/main/resources/static/IMG");
+            Files.createDirectories(destinationDirectory); // 디렉토리가 없으면 생성
+
+            Path destination = destinationDirectory.resolve(fileName);
+            Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            return "/IMG/" + fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 파일 저장 실패 처리 로직 추가
+            return null;
+        }
+    }
+
+    public String saveFileAndReturnPath(MultipartFile file) {
+        try {
+            String fileName = "file_" + System.currentTimeMillis() + ".pdf";
+            String filePath = "/path/to/file/directory/" + fileName;
+
+            // 파일을 서버에 저장
+            Path destination = Paths.get(filePath);
+            Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            return "/file/" + fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 파일 저장 실패 처리 로직 추가
+            return null;
+        }
+    }
+
+    public String saveVideoAndReturnPath(MultipartFile video) {
+        try {
+            String fileName = "video_" + System.currentTimeMillis() + ".avi";
+            String filePath = "/path/to/video/directory/" + fileName;
+
+            // 비디오를 서버에 저장
+            Path destination = Paths.get(filePath);
+            Files.copy(video.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+            return "/video/" + fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 파일 저장 실패 처리 로직 추가
+            return null;
+        }
     }
 }

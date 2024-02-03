@@ -10,25 +10,34 @@ public class Posting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "userId")
     private String userId;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "author")
     private String author;
 
+    @Column(name = "content")
     private String content;
 
-    private String image;
+    @Column(name = "imagePath")
+    private String imagePath;
 
-    private String video;
+    @Column(name = "videoPath")
+    private String videoPath;
 
-    private String file;
+    @Column(name = "filePath")
+    private String filePath;
 
+    @Column(name = "link")
     private String link;
 
+    @Column(name = "created_at")
     private LocalDateTime created_at;
 
+    @Column(name = "boardType")
     private String boardType;
 
     @OneToMany(mappedBy = "posting", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
@@ -75,28 +84,28 @@ public class Posting {
         this.link = link;
     }
 
-    public String getFile() {
-        return file;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFile(String file) {
-        this.file = file;
+    public void setFilePath(String file) {
+        this.filePath = file;
     }
 
-    public String getVideo() {
-        return video;
+    public String getVideoPath() {
+        return videoPath;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setVideoPath(String video) {
+        this.videoPath = video;
     }
 
-    public String getImage() {
-        return image;
+    public String getImagePath() {
+        return imagePath;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagePath(String image) {
+        this.imagePath = image;
     }
 
     public String getContent() {
