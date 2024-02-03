@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,7 +42,7 @@ public class BoardController {
     public String write(@RequestParam(name = "boardType") String boardType, Model model) {
         Posting posting = new Posting();
         posting.setBoardType(boardType);
-        // �� ���� �������ϱ� ���� �� Posting ��ü�� ����
+
         model.addAttribute("posting", posting);
         model.addAttribute("editable", false);  // ���� ������ ���·� ����
         return "write";
@@ -49,13 +50,26 @@ public class BoardController {
 
     @PostMapping("/submit_post")
     public String submitPost(@ModelAttribute("postForm") Posting posting,
-                             @RequestParam("boardType") String boardType) {
+                             @RequestParam("boardType") String boardType,
+                             @RequestParam("image") MultipartFile image,
+                             @RequestParam("video") MultipartFile video,
+                             @RequestParam("file") MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         posting.setUserId(userDetails.getUsername());
         posting.setCreated_at(LocalDateTime.now());
         posting.setBoardType(boardType);
+
+        // 파일 업로드 및 저장
+        String imagePath = postingService.saveImageAndReturnPath(image);
+        String videoPath = postingService.saveVideoAndReturnPath(video);
+        String filePath = postingService.saveFileAndReturnPath(file);
+
+        // 파일 경로를 엔터티에 설정
+        posting.setImagePath(imagePath);
+        posting.setVideoPath(videoPath);
+        posting.setFilePath(filePath);
 
         postingService.postSave(posting);
         return "redirect:/board/" + boardType;
@@ -70,7 +84,6 @@ public class BoardController {
 
         String boardType = form.getBoardType();
 
-        // ����� �Խñ� ������Ʈ
         postingService.postUpdate(updatedPosting);
 
         return "redirect:/board/" + boardType;
@@ -124,4 +137,5 @@ public class BoardController {
 
         return "redirect:/board/board/" + postId;
     }
+
 }
