@@ -22,7 +22,7 @@
 
 <form th:object="${posting}"
       th:action="@{'/' + ${posting.boardType eq 'notice' ? 'notice' : 'board'}
-                + ${editable ? '/save_edit' : '/submit_post'}}" method="post">
+                + ${editable ? '/save_edit' : '/submit_post'}}" method="post" enctype="multipart/form-data">
 
     <!-- Hidden fields -->
     <input type="hidden" th:field="*{id}" />
@@ -42,15 +42,15 @@
 
     <!-- Image -->
     <label for="image">사진 추가:</label>
-    <input type="text" id="image" th:field="*{image}" placeholder="이미지 경로 입력"><br>
+    <input type="file" id="image" name="image" placeholder="이미지 입력"><br>
 
     <!-- Video -->
     <label for="video">동영상 추가:</label>
-    <input type="text" id="video" th:field="*{video}" placeholder="동영상 경로 입력"><br>
+    <input type="file" id="video" name="video" placeholder="동영상 입력"><br>
 
     <!-- File -->
     <label for="file">파일 추가:</label>
-    <input type="text" id="file" th:field="*{file}" placeholder="파일 경로 입력"><br>
+    <input type="file" id="file" name="file" placeholder="파일 입력"><br>
 
     <!-- Link -->
     <label for="link">링크 추가:</label>
