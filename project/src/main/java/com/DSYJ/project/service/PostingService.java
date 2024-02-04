@@ -4,6 +4,7 @@ import com.DSYJ.project.domain.Posting;
 import com.DSYJ.project.repository.SpringDataJpaPostingRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -96,19 +97,20 @@ public class PostingService {
         postingRepository.deleteById(id);
     }
 
+    @Value("${file.upload.directory}")
+    private String uploadDirectory;  // application.properties에서 설정된 파일 업로드 디렉토리
+
     public String saveImageAndReturnPath(MultipartFile image) {
         try {
             String fileName = UUID.randomUUID() + ".png";
-            String filePath = "src/main/resources/static/IMG/" + fileName;
 
             // 이미지를 서버에 저장
-            Path destinationDirectory = Paths.get("src/main/resources/static/IMG");
-            Files.createDirectories(destinationDirectory); // 디렉토리가 없으면 생성
+            Path destinationDirectory = Paths.get(uploadDirectory, "image");
 
             Path destination = destinationDirectory.resolve(fileName);
             Files.copy(image.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-            return "/IMG/" + fileName;
+            return "/image/" + fileName;
         } catch (IOException e) {
             e.printStackTrace();
             // 파일 저장 실패 처리 로직 추가
@@ -119,10 +121,11 @@ public class PostingService {
     public String saveFileAndReturnPath(MultipartFile file) {
         try {
             String fileName = "file_" + System.currentTimeMillis() + ".pdf";
-            String filePath = "/path/to/file/directory/" + fileName;
 
             // 파일을 서버에 저장
-            Path destination = Paths.get(filePath);
+            Path destinationDirectory = Paths.get(uploadDirectory, "file");
+
+            Path destination = destinationDirectory.resolve(fileName);
             Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
             return "/file/" + fileName;
@@ -135,11 +138,12 @@ public class PostingService {
 
     public String saveVideoAndReturnPath(MultipartFile video) {
         try {
-            String fileName = "video_" + System.currentTimeMillis() + ".avi";
-            String filePath = "/path/to/video/directory/" + fileName;
+            String fileName = "video_" + UUID.randomUUID() + ".avi";
 
             // 비디오를 서버에 저장
-            Path destination = Paths.get(filePath);
+            Path destinationDirectory = Paths.get(uploadDirectory, "video");
+
+            Path destination = destinationDirectory.resolve(fileName);
             Files.copy(video.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
 
             return "/video/" + fileName;
