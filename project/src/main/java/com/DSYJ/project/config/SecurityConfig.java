@@ -27,7 +27,7 @@ public class SecurityConfig {
                                 "/CSS/**", "/JS/**",
                                 "/image/**",
                                 "/error").permitAll()
-                        .requestMatchers("/notice/write").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/notice/write").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 
@@ -62,6 +62,10 @@ public class SecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable);
+
+        http
+                .exceptionHandling(configurer -> configurer
+                        .accessDeniedPage("/error/access-denied"));
 
         return http.build();
     }

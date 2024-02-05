@@ -142,4 +142,5 @@ public class NoticeController {
         postingService.deletePost(postId);
         return "redirect:/notice/notice";
     }
+
 }
