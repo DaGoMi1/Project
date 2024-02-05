@@ -30,9 +30,7 @@
             </div>
             <div class="double">
                 <div class="contents2">공지사항</div>
-                <div class="contents2" th:each="board : ${freeBoardList}">
-                    <a th:href="@{'/board/' + ${board.id}}" th:text="${board.title}"></a>
-                </div>
+                <div class="contents2">자유게시판</div>
                 <div class="contents2">시간표</div>
             </div>
         </div>
