@@ -3,6 +3,7 @@ package com.DSYJ.project.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,6 +18,36 @@ public class Comment {
     private String userId;
     private LocalDateTime createdDate;
     private String modifiedDate;
+    @ManyToOne
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
+
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> childComments;
+
+    public List<Comment> getChildComments() {
+        return childComments;
+    }
+
+    public void setChildComments(List<Comment> childComments) {
+        this.childComments = childComments;
+    }
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public void addChildComment(Comment childComment) {
+        if (childComments == null) {
+            childComments = new ArrayList<>();
+        }
+        childComments.add(childComment);
+        childComment.setParentComment(this);
+    }
     public String getModifiedDate() {
         return modifiedDate;
     }
