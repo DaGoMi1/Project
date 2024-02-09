@@ -139,7 +139,9 @@ public class BoardController {
     }
 
     @PostMapping("/addComment")
-    public String addComment(@RequestParam Long postId, @RequestParam String userId, @RequestParam String comment) {
+    public String addComment(@RequestParam Long postId,
+                             @RequestParam String userId,
+                             @RequestParam String comment) {
         Posting posting = postingService.findById(postId).orElse(null);
 
         if (posting != null) {
@@ -154,5 +156,6 @@ public class BoardController {
 
         return "redirect:/board/board/" + postId;
     }
+
 
 }
